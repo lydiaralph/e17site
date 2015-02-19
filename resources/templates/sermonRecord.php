@@ -2,13 +2,14 @@
 
 $rows = mysql_num_rows($full_database);
 
+echo '<table>';
 for ($j = 0; $j < $rows ; ++$j)
 {
   $row = mysql_fetch_row($full_database);
   if (!$row){continue;}
-  echo '<div class="sermonRecord">';
-  echo '<table>';
-  echo '<tr><td>';
+  echo '<tr class="sermonRecord">';
+  
+  echo '<td>';
   
   /* TODO - use field db names as columns */
   /*
@@ -69,7 +70,6 @@ for ($j = 0; $j < $rows ; ++$j)
   
   echo '</td></tr>';
   echo '</table>';
-  echo '</div>';
 }
 
 ?>

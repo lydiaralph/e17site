@@ -20,5 +20,14 @@ echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . STYLE_PATH . "\">";
 </head>
 
 <body>
+
+    
+<?php
+// TODO: soft link
+//  echo "<div class='adminMenu'><a href=\"" . TEMPLATES_PATH . "/admin.php\">Log in</a></div>";
+?>
+
+    <div class='adminMenu'><a href="/resources/templates/admin.php">Log in</a></div>
+
     <div class='pageHeader'>Welcome</div>
 <div class="mainContent">

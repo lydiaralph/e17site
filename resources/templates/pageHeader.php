@@ -27,7 +27,9 @@ echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . STYLE_PATH . "\">";
 //  echo "<div class='adminMenu'><a href=\"" . TEMPLATES_PATH . "/admin.php\">Log in</a></div>";
 ?>
 
+<div class="header">
     <div class='adminMenu'><a href="/resources/templates/admin.php">Log in</a></div>
 
     <div class='pageHeader'>Welcome</div>
+</div>
 <div class="mainContent">

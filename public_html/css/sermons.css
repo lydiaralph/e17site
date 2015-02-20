@@ -1,16 +1,5 @@
 @import url('/public_html/css/genericons.css');
 
-/*
-@font-face{
-    font-family: 'genericons';
-    src: url('/genericons-regular-webfont.eot');
-    src: url('font/genericons-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('font/genericons-regular-webfont.woff') format('woff'),
-         url('font/genericons-regular-webfont.ttf') format('truetype'),
-         url('font/genericons-regular-webfont.svg#genericonsregular') format('svg');
-}
-*/
-
 @font-face {
     font-family: 'Genericons';
     src: url('/public_html/css/genericons/genericons-regular-webfont.eot');
@@ -28,7 +17,9 @@ font-family: Calibri, Arial, sans-serif;
 }
 
 
-.mainContent{
+
+.mainContent,
+.header{
 margin: auto;
 margin-top: 40px;
 padding: 20px;
@@ -121,42 +112,43 @@ max-width: 30%;
 margin: 1.5%;
 }
 
+table, tbody{
+    width: 100%;
+    max-width: 100%;
+}
+
 .sermonRecord{
-border: 1px solid black;
-width: 300px;
-max-width: 100%;
+border-top: 1px solid #eeeeed;
+width: 100%;
+max-width: 700px;
+padding: 35px 5px;
 }
 
 .sermonRecord span{
 padding: 5px;
 }
 
-.sermonRecord .date {
-float: bottom;
-}
-
-.sermonRecord span.time {
-
+.sermonRecord .date,
+.sermonRecord span.time,
+.sermonRecord span.book,
+.sermonRecord span.ref{
+font-size: 0.8em;
 }
 
 .sermonRecord span.title {
 font-weight: bold;
 display: block;
+font-size: 1.4em;
+color: darkslategrey;
+font-family: serif;
 }
 
 .sermonRecord span.series {
 display: block;
+font-style: italic; 
 }
 
-.sermonRecord span.book{
-clear: left;    
-}
-
-.sermonRecord span.ref {
-
-}
-
-.sermonRecord span.mp3:before{
+.sermonRecord span.mp3-icon > a{
     font-family: 'Genericons';
     content: '\f109';
     font-size: 40px;

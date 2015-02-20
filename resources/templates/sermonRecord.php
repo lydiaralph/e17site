@@ -27,50 +27,59 @@ for ($j = 0; $j < $rows ; ++$j)
   
   for($column=1; $column < (sizeof($row)); $column++){
   
-      echo "<span class=\"";
-      
-      switch($column){
-          case 1: 
-              echo "date";
-              break;
-          case 2:
-              echo "time";
-              break;
+      if($column == 8){
+          echo '</td><td><span class="mp3-icon"><a href="/mp3/';
+          echo $row[$column];
+          echo '">\'\f109\'</a></span>';
           
-          case 3:
-              echo "title";
-              break;
-          
-          case 4:
-              echo "series";
-              break;
-          
-          case 5:
-              echo "book";
-              break;
-          
-          case 6:
-              echo "ref";
-              break;
-          
-          case 7:
-              echo "mp3";
-              break;
-          
-          case 8:
-              echo "preacher";
-              break;
-          
-          default: break;
+          echo '</td><td><span class="mp3"><a href="/mp3/';
+          echo $row[$column];
+          echo '">' . $row[$column] . '</a></span>';                       
       }
-      echo "\">";
-      echo $row[$column];
-      echo "</span>";
+      else{
+        echo "<span class=\"";
+
+        switch($column){
+            case 1: 
+                echo "title";
+                break;
+            case 2:
+                echo "series";
+                break;
+
+            case 3:
+                echo "date";
+                break;
+
+            case 4:
+                echo "time";
+                break;
+
+            case 5:
+                echo "book";
+                break;
+
+            case 6:
+                echo "ref";
+                break;
+
+            case 7:
+                echo "preacher";
+                break;
+
+            case 8:
+            default: break;
+        }
+        echo "\">";
+        echo $row[$column];
+        echo "</span>";
+      }
   }
   
   echo '</td></tr>';
-  echo '</table>';
 }
+  echo '</table>';
+
 
 ?>
 

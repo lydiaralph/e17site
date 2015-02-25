@@ -1,63 +1,65 @@
 <?php
 
-echo <<<_FILTER_INTRO
-<div id="filterBox">
-   <script defer type="text/javascript" src="filter.js"></script>
-   <form id="selform" action="">
-   <p class="header3">Filter your results</p>
-_FILTER_INTRO;
+// Doesn't need to be included as referenced by <script> header
+//include_once(__LIBRARY__.'/filter.js'); 
+
+echo "<div id=\"filterBox\">";
+echo "<script defer type=\"text/javascript\" src=\"/public_html/js/filter.js\"></script>";
+echo "<form id=\"selform\" action=\"\">";
+echo "<p class=\"header3\">Filter your results</p>";
+
+
 
 /* FILTER BY DB FIELDS */
 
 foreach ($mysql_queries as $field) {
-    echo "<select id=" . $field . "select onChange=\"select(this.id)\">";
+    echo "<select id=" . $field . " onChange=\"select(this.id)\">";
     switch ($field) {
         case 'bible_book':
             $j = 0;
             foreach ($bible_books as $item) {
-                if ($j==0) {
+                if ($j == 0) {
                     echo "<option value=\"\">-- Any Bible book--</option>";
                     echo "<optgroup label=\"Old Testament\">";
-                }
-                else {
+                } else {
                     // if book is not found in bible_ref_list, disable option
                     if (in_array($item, $bible_book_list)) {
                         echo "<option value=\"$item\">$item</option>";
-                    }
-                    else {
+                    } else {
                         echo "<option value=\"$item\" disabled>$item</option>";
                     }
-                    if ($j==39) {
+                    if ($j == 39) {
                         echo "</optgroup>";
                         echo "<optgroup label=\"New Testament\">";
                     }
                 }
                 ++$j;
-            echo "</optgroup>";    
+                echo "</optgroup>";
             }
+            echo "</select>";
             break;
 
         default:
             echo "<option value=\"\">-- Any " . $field . " --</option>";
             /* Puts each item in e.g. "preacher_list" into $opt */
+
+//            foreach (${$field . "_list"} as $opt) {
+//                echo "<li>Option: " . $opt . "</li>";
+//            }
+
             foreach (${$field . "_list"} as $opt) {
+
                 if ($field == "year" && $opt == 0) {
-/*                  echo "<option value=\"${$field . "_opt"}\">Unknown</option>"; */
-                  echo "<option value=\"" . ${$field . "_opt" } . "\">Unknown</option>";
-
+                    echo "<option value=\"" .  $opt . "\">Unknown</option>";
+                } else {
+                    echo "<option value=\"" . $opt . "\">" . $opt . "</option>";
                 }
-                else {
-/*                     echo "<option value=\"${$field . "_opt"}\">${$field . "_opt"}</option>"; */
-                     echo "<option value=\"" . ${$field . "_opt"} . "\">" . $opt . "</option>";
-/*                     echo "<option value=\"" . $opt . "\">" . $opt . "</option>"; */
-                }
-                break;
             }
+
+            echo "</select>";
     }
-
-    echo "</select>";
 }
-
+echo "<button id=\"clearFilters\" onClick=\"removeFilters()\">Remove filters</button>";
 echo "</form></div>";
 
 ?>

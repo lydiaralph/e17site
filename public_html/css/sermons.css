@@ -130,7 +130,7 @@ padding: 5px;
 
 .sermonRecord .date,
 .sermonRecord span.time,
-.sermonRecord span.book,
+.sermonRecord span.bible_book,
 .sermonRecord span.ref{
 font-size: 0.8em;
 }

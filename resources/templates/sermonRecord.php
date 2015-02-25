@@ -39,6 +39,7 @@ for ($j = 0; $j < $rows ; ++$j)
       else{
         echo "<span class=\"";
 
+        //TODO: Get these dynamically from $field
         switch($column){
             case 1: 
                 echo "title";
@@ -56,7 +57,7 @@ for ($j = 0; $j < $rows ; ++$j)
                 break;
 
             case 5:
-                echo "book";
+                echo "bible_book";
                 break;
 
             case 6:

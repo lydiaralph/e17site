@@ -10,6 +10,12 @@
 // Config file contains login details and DB field names
 require_once(__RESOURCES__.'/config.php'); 
 
+$mysql_queries = array ('preacher' => "preacher",
+                        'series' => "series",
+                        'bible_book' => "bible_book",
+                        'date' => "date",
+                        'time' => "time");
+
 if(!$connected_to_db)
 {
     $db_read_only = mysql_connect($db_hostname, $db_reader_user, $db_reader_password);

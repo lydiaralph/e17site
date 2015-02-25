@@ -1,0 +1,6 @@
+
+Camel Text:
+fileName
+className
+
+"" rather than ''

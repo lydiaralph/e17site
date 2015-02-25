@@ -1,6 +1,7 @@
 <?php
-require_once 'login.php';
-require_once 'php_functions.php';
+define('__RESOURCES__', dirname(dirname(dirname(__FILE__)))); 
+require_once(__RESOURCES__. "/config.php"); 
+require_once(TEMPLATES_PATH . "/admin/phpFunctions.php");
 
 list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
 

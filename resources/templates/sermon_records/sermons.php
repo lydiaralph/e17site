@@ -4,7 +4,7 @@
     TODO: move to public_html folder */
 
 
-define('__RESOURCES__', dirname(dirname(__FILE__))); 
+define('__RESOURCES__', dirname(dirname(dirname(__FILE__)))); 
 require_once(__RESOURCES__.'/config.php'); 
 
 // SQL queries
@@ -19,18 +19,18 @@ require_once(TEMPLATES_PATH . "/pageHeader.php");
 
   <div id="sermonsTableHeader">
     <?php
-      require_once(TEMPLATES_PATH . "/sermonHeader.php");
+      require_once(TEMPLATES_PATH . "/sermon_records/sermonHeader.php");
     ?>
   </div>
     <div id="filter">
     <?php
-        require_once(TEMPLATES_PATH . "/filterPanel.php");
+        require_once(TEMPLATES_PATH . "/sermon_records/filterPanel.php");
     ?>
     </div>
     
   <div id="sermonRecords">
     <?php
-      require_once(TEMPLATES_PATH . "/sermonRecord.php");
+      require_once(TEMPLATES_PATH . "/sermon_records/sermonRecord.php");
     ?>
   </div>
 

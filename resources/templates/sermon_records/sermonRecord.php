@@ -26,7 +26,6 @@ for ($j = 0; $j < $rows ; ++$j)
   */
   
   for($column=1; $column < (sizeof($row)); $column++){
-  
       if($column == 8){
           echo '</td><td><span class="mp3-icon"><a href="/mp3/';
           echo $row[$column];

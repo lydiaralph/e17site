@@ -1,0 +1,7 @@
+Aims of this branch:
+- create a very basic version of website
+- static variables if necessary
+- procedural programming
+- sermons.php to display records
+- create_new_record.php to insert a new record
+- acceptable styling & formatting

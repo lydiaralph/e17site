@@ -1,9 +1,13 @@
 <?php
 define('__RESOURCES__', dirname(dirname(dirname(__FILE__)))); 
 require_once(__RESOURCES__. "/config.php"); 
+require_once(__RESOURCES__. "/login.php"); 
 require_once(TEMPLATES_PATH . "/admin/phpFunctions.php");
 
-list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) 
+        = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+
+
 
 if( strlen($_SERVER['PHP_AUTH_USER']) == 0 ||
     strlen($_SERVER['PHP_AUTH_PW']) == 0)

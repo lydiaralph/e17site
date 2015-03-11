@@ -9,6 +9,7 @@
 
 // Config file contains login details and DB field names
 require_once(__RESOURCES__.'/config.php'); 
+require_once(__RESOURCES__.'/login.php'); 
 
 $mysql_queries = array ('preacher' => "preacher",
                         'series' => "series",

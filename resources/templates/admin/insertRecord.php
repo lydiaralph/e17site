@@ -1,11 +1,19 @@
 <?php
 
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Handles form input once JS validation is completed
  */
+
+define('__RESOURCES__', dirname(dirname(dirname(__FILE__)))); 
+require_once(__RESOURCES__. "/config.php"); 
+
+require_once(TEMPLATES_PATH . "/admin/getFileName.php");
+require_once(TEMPLATES_PATH . "/admin/phpFunctions.php");
+require_once(TEMPLATES_PATH . "/admin/phpValidation.php");
+
 function insertRecord($field_names){
+    
+    //echo "<div>Got to insertRecord</div>";
     
     $cleanFileName = "";
     $date = "";
@@ -36,9 +44,12 @@ function insertRecord($field_names){
         $found_error .= getFileName($date, $time, $sermon_title, $cleanFileName);
     }
 
+    //echo "<div>Found error: $found_error</div>";
+    
     // If fails, reloads the HTML form with error
     if ($found_error == "") {
         // TODO: replace with variables as order has changed
+        // TODO: replace db table name with variable
         $query = "INSERT INTO sermon_files VALUES" .
            "(NULL, '$sermon_title', '$series', '$date', '$time', '$bible_book', '$bible_ref', '$preacher', '$cleanFileName')";
 
@@ -49,7 +60,9 @@ function insertRecord($field_names){
         }
         else { 
           echo "Success!<br />";
-          echo "<form action=\"create_new_record.php\"><input type=\"submit\" value=\"Enter another record\"></form>";
+          //TODO: replace with soft link to createNewRecord.php
+          echo "<form action=\"createNewRecord.php\"><input type=\"submit\" value=\"Enter another record\"></form>";
+          //TODO: replace with soft link to sermons.php
           echo "<form action=\"sermons.php\"><input type=\"submit\" value=\"Go to sermons page\"></form>";
         }
         exit; 

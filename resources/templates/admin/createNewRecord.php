@@ -6,13 +6,14 @@
 define('__RESOURCES__', dirname(dirname(dirname(__FILE__)))); 
 require_once(__RESOURCES__. "/config.php"); 
 
-require_once(LIBRARY_PATH . "/mysqlLists.php");
+// User Authentication must be before mysqlLists
 require_once(LIBRARY_PATH . "/userAuthentication.php");
+require_once(LIBRARY_PATH . "/mysqlLists.php");
+
 
 require_once(TEMPLATES_PATH . "/admin/insertRecord.php");
-require_once(TEMPLATES_PATH . "/admin/getFileName.php");
-require_once(TEMPLATES_PATH . "/admin/phpFunctions.php");
-require_once(TEMPLATES_PATH . "/admin/phpValidation.php");
+
+
 
 define('__ROOT__', dirname(dirname(dirname(dirname(__FILE__))))); 
 
@@ -46,7 +47,7 @@ require_once(TEMPLATES_PATH . "/pageHeader.php");
 
 
 echo <<<_END_FORM_START
-<script defer type=\"text/javascript\" src=\"/public_html/js/validation.js\"></script>
+<script defer type="text/javascript" src="/public_html/js/validation.js"></script>
 <form action="createNewRecord.php" 
         method="post" onsubmit="return validate(this)" enctype="multipart/form-data">
        <div id="create_record_table">
@@ -56,9 +57,9 @@ _END_FORM_START;
 
 
  
-$var = array('i'=>10, 'j'=>20);
+//$var = array('i'=>10, 'j'=>20);
  
-$firephp->log($var, 'Iterators');
+//$firephp->log($var, 'Iterators');
 
 //FB::log('Log message');
 //FB::info('Info message');

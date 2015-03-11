@@ -1,0 +1,27 @@
+
+
+table{
+    table-layout: fixed;
+    width: 900px;
+    font: normal 16px helvetica;
+    color:#444444;
+}
+
+
+
+th, td {
+    width: 450px;
+}
+
+#bible_book option{
+    width:200px;
+}
+
+#select_preacher option{
+    width:200px;
+}
+
+#select_series option{
+    width:200px;
+}
+

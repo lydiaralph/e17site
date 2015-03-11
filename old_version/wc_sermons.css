@@ -1,0 +1,126 @@
+body {
+background-color: rgb(81,45,109);
+font-family: Calibri, Arial, sans-serif;
+}
+
+
+div#mainContent{
+margin: auto;
+margin-top: 40px;
+padding: 20px;
+max-width: 80%;
+background: white;
+}
+
+
+.row{
+margin: 20px;
+}
+
+.label{
+min-width: 200px;
+margin-right: 15px;
+display: inline-flex;
+}
+
+span label {
+margin-right: 55px;
+}
+
+input{
+width: 340px;
+}
+
+select{
+width: 350px;
+}
+
+
+select,
+input {
+margin-right: 30px;
+padding: 5px;
+}
+
+select#day {
+width: 70px;
+}
+
+select#month {
+width: 120px;
+}
+
+select#year {
+width: 100px;
+}
+
+input[type="radio"] {
+margin: 0 8px;
+width: initial;
+}
+
+input#submitButton{
+width:300px;
+padding: 10px;
+}
+
+span.chapter,
+span.verse{
+margin-right: 10px;
+}
+
+span#bible_ch_start > input,
+span#bible_ch_end > input,
+span#bible_verse_start > input,
+span#bible_verse_end > input{
+width: 45px;
+}
+
+/* SERMON LISTING PAGE */
+div#sermonsIntro {
+width: 60%;
+float: left;
+}
+
+div#bible_gateway_table {
+width: 40%;
+float: left;
+}
+
+#selform select {
+width: 18%;
+margin: 1%;
+}
+
+.sermonTable span{
+display: inline-table;
+padding: 5px;
+}
+
+.sermonTable span.columnDate {
+width: 8%;
+}
+
+.sermonTable span.columnTime {
+width: 5%;
+}
+
+.sermonTable span.columnTitle {
+width: 18%;
+}
+
+.sermonTable span.columnSeries {
+width: 18%;
+}
+
+.sermonTable span.columnReference {
+width: 18%;
+}
+
+.sermonTable span.columnPreacher {
+width: 8%;
+}
+
+.hidden{
+display: none;
+}

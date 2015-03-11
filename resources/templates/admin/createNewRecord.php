@@ -1,7 +1,16 @@
 <?php // createNewRecord.php
 
-/** This is intended to be a wrapper file bringing together other resources.
-    TODO: move to public_html folder */
+/** 
+ * Generates a form for user to input data for new record. 
+ * Once form is submitted, it is processed by insertRecord.php
+ * TODO: move to public_html folder 
+ */
+
+// FirePHP is not dependent on anything else, i.e. doesn't require config.php
+define('__ROOT__', dirname(dirname(dirname(dirname(__FILE__))))); 
+require_once (__ROOT__ . '/FirePHPCore/fb.php');
+ob_start();
+$firephp = FirePHP::getInstance(true);
 
 define('__RESOURCES__', dirname(dirname(dirname(__FILE__)))); 
 require_once(__RESOURCES__. "/config.php"); 
@@ -11,62 +20,19 @@ require_once(LIBRARY_PATH . "/userAuthentication.php");
 require_once(LIBRARY_PATH . "/mysqlLists.php");
 
 
-require_once(TEMPLATES_PATH . "/admin/insertRecord.php");
-
-
-
-define('__ROOT__', dirname(dirname(dirname(dirname(__FILE__))))); 
-
-require_once (__ROOT__ . '/FirePHPCore/fb.php');
-
-ob_start();
-
-// Initialization
-
-
-// TODO: replace this with variables from mysql
-$field_names = array("day", "month", "year", "time", "sermon_title", "series", 
-    "preacher", "bible_book", "bible_ch_start", "bible_verse_start",  
-    "bible_ch_end", "bible_verse_end", "file_name");
-
-
-$found_error = ""; 
-$count = 0; 
-
-if ($_POST['submitted'] == "yes") {
-    $found_error .= insertRecord($field_names);
-}
-
+include_once(TEMPLATES_PATH . "/admin/insertRecord.php");
 
 //HTML Form
-
-
-
 require_once(TEMPLATES_PATH . "/pageHeader.php");
-
-
 
 echo <<<_END_FORM_START
 <script defer type="text/javascript" src="/public_html/js/validation.js"></script>
-<form action="createNewRecord.php" 
+<form action="insertRecord.php" 
         method="post" onsubmit="return validate(this)" enctype="multipart/form-data">
        <div id="create_record_table">
            <div class="row"><h1>Upload New Record</h1></div>
                
 _END_FORM_START;
-
-
- 
-//$var = array('i'=>10, 'j'=>20);
- 
-//$firephp->log($var, 'Iterators');
-
-//FB::log('Log message');
-//FB::info('Info message');
-//FB::warn('Warn message');
-//FB::error('Error message');
-
-
    
  if ($found_error != "") {
      echo "<div class=\"row\"><span class=\"cell\" id=\"error_message\" colspan=\"2\">"
@@ -213,6 +179,7 @@ echo <<<_END_FORM
 _END_FORM;
 
 require_once(TEMPLATES_PATH . "/pageFooter.php");
+ob_end_flush(); 
 ?>
 
 

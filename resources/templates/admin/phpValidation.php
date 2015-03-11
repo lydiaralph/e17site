@@ -1,17 +1,16 @@
 <?php
-function is_not_blank($value) {
-    if ($value == "") {
-        return ($value . " must not be blank.\n");
+function checkInput($field_names) {
+    $firephp->log('Processing checkInput()...');
+    $found_error = "";
+    foreach ($field_names as $field) {
+        $firephp->log('Checking ' . $field . ' is not blank...');
+        $found_error .= isNotBlank($value);
     }
-    if ($value == null) {
-        return ($value . " must not be blank.\n");
-    }
-    return "";
+    return $found_error;
 }
 
 
-
-function validate_bible_ref($bible_ref, $bible_ch_start, $bible_ch_end, 
+function validateBibleRef($bible_ref, $bible_ch_start, $bible_ch_end, 
         $bible_verse_start, $bible_verse_end) {
     if ($bible_ch_end < $bible_ch_start)
       {
@@ -28,6 +27,6 @@ function validate_bible_ref($bible_ref, $bible_ch_start, $bible_ch_end,
       return "$bible_ch_start:$bible_verse_start - $bible_ch_end:$bible_verse_end";
 }
 
-function validate_uploaded_file ($_FILES) {
+function validateUploadedFile ($_FILES) {
 
 }

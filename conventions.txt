@@ -1,6 +1,13 @@
 
-Camel Text:
+Camel Text for everything:
 fileName
 className
+phpFunctions
+
+
+Underscores for
+$php_variables
+html_classes 
+html_id
 
 "" rather than ''

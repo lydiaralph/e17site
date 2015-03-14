@@ -8,7 +8,9 @@ define('__RESOURCES__', dirname(dirname(dirname(__FILE__))));
 require_once(__RESOURCES__.'/config.php'); 
 
 // SQL queries
-require_once(LIBRARY_PATH . "/mysqlLists.php");
+
+// TODO: get records: $field_names, $full_db
+require_once(LIBRARY_PATH . "/readDbRecords.php");
 
 // Page contents     
 require_once(TEMPLATES_PATH . "/pageHeader.php");

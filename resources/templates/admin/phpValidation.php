@@ -1,10 +1,22 @@
 <?php
-function checkInput($field_names) {
-    $firephp->log('Processing checkInput()...');
+
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
+
+// FirePHP is not dependent on anything else, i.e. doesn't require config.php
+//define('__ROOT__', dirname(dirname(dirname(dirname(__FILE__))))); 
+require_once (__ROOT__ . '/FirePHPCore/fb.php');
+ob_start();
+//$firephp = FirePHP::getInstance(true);
+
+function checkFieldValuesAreNotBlank($field_values) {
+    FB::log('Checking fields are not blank...');
     $found_error = "";
-    foreach ($field_names as $field) {
-        $firephp->log('Checking ' . $field . ' is not blank...');
-        $found_error .= isNotBlank($value);
+    foreach ($field_values as $field) {
+        if(!isNotBlank($field)){
+            $found_error .= "$field must not be blank";
+            FB::log($found_error);
+        }
     }
     return $found_error;
 }
@@ -30,3 +42,5 @@ function validateBibleRef($bible_ref, $bible_ch_start, $bible_ch_end,
 function validateUploadedFile ($_FILES) {
 
 }
+
+ob_end_flush(); 

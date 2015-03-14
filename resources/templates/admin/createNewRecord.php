@@ -1,4 +1,6 @@
 <?php // createNewRecord.php
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
 
 /** 
  * Generates a form for user to input data for new record. 
@@ -15,19 +17,34 @@ $firephp = FirePHP::getInstance(true);
 define('__RESOURCES__', dirname(dirname(dirname(__FILE__)))); 
 require_once(__RESOURCES__. "/config.php"); 
 
-// User Authentication must be before mysqlLists
+// userAuthentication needed to check user is authorised to view this page
+// If fails, redirect to sermons.php
 require_once(LIBRARY_PATH . "/userAuthentication.php");
-require_once(LIBRARY_PATH . "/mysqlLists.php");
+if(!openConnection('authorised')){
+    FB::error("Authorisation failed");
+    alert("Authorisation failed");
+    require_once(TEMPLATES_PATH . "/sermons.php");
+}
 
+require_once(LIBRARY_PATH . "/readDbRecords.php");
 
-include_once(TEMPLATES_PATH . "/admin/insertRecord.php");
+// TODO: does this need to be imploded to obtain correct array? as readDbRecords
+// returns associative array of results by task
+$field_names = readDbRecords('get_lists');
+
+// LER TODO: not sure this is necessary
+//include_once(TEMPLATES_PATH . "/admin/processInput.php");
+
+/******************************************************************************
+ * PAGE CONTENTS                                                              *
+ *****************************************************************************/
 
 //HTML Form
 require_once(TEMPLATES_PATH . "/pageHeader.php");
 
 echo <<<_END_FORM_START
 <script defer type="text/javascript" src="/public_html/js/validation.js"></script>
-<form action="insertRecord.php" 
+<form action="processInput.php" 
         method="post" onsubmit="return validate(this)" enctype="multipart/form-data">
        <div id="create_record_table">
            <div class="row"><h1>Upload New Record</h1></div>

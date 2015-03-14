@@ -7,39 +7,48 @@
  * 
  */
 
-function getFileName($date, $time, $sermon_title, $cleanFileName) {
+function getFileName($field_values){
+        //$date, $time, $sermon_title, $cleanFileName) {
+    $found_error = "";
+    
     $file_name = $_FILES['file_name']['name'];
 
     if (!$file_name) {
-        $found_error .= "No file uploaded. Please upload an mp3 file or a PDF file.";
+        FB::error("No file uploaded. Please upload an mp3 file or a PDF file.");
+        exit;
     } else {
-        $new_file_name = $date . '_' . $time . '_' . str_replace(" ", '_', $sermon_title);
-
+        // Find extension: file should be of audio or PDF type
         $ext = $folder = "";
-
-        $found_error = checkFileType($ext, $folder);
-
-        if ($ext == "") {
-            $found_error .= "'$file_name' is not of an accepted file type. Please upload mp3 or PDF files only.";
+        $ext = checkFileType($_FILES['file_name']['type']);
+        $folder = getFolder($ext);
+        if ($ext == "" || $folder == "") {
+            FB::error("'$file_name' had no extension or extension was invalid. "
+            . "Please upload mp3 or PDF files only.");
+            exit;
         }
+    
+        // Sanitize file name. New file name based on date, time, title.
+        $new_file_name =              $field_values['date'] . '_' . 
+                                      $field_values['time'] . '_' . 
+                str_replace(" ", '_', $field_values['sermon_title']);
         
-
-        //  $length = wavDur($_FILES['filename']['tmp_name']);
-        $cleanFileName = $new_file_name . $ext;
-        $file_path = $folder . "/" . $cleanFileName;
-        $success = move_uploaded_file($_FILES['file_name']['tmp_name'], $file_path);
-
-        // upload file
-
-        if (!$success) {
-            $found_error .= "Upload failed";
+        //  TODO: $length = wavDur($_FILES['filename']['tmp_name']);
+        $file_path = $folder . "/" . $new_file_name . $ext;
+        
+        if ($file_path == ""){
+            FB::error("Could not determine file path");
+            exit;
+        } else if(!move_uploaded_file($_FILES['file_name']['tmp_name'], $file_path)){
+            FB::error("Upload failed");
+            exit;
         }
     }
-    return $found_error;
+    return $filepath;
 }
 
-function checkFileType($ext, $folder) {
-    switch ($_FILES['file_name']['type']) {
+function checkFileType($fileType) {
+    $ext = "";
+    switch ($fileType) {
         case 'audio/mp3':
         case 'audio/mpeg':
         case 'audio/mpeg1':
@@ -47,20 +56,27 @@ function checkFileType($ext, $folder) {
         case 'audio/mpeg3':
         case 'audio/mpeg4':
             $ext = '.mp3';
-            $folder = 'mp3';
             break;
 
         case 'application/pdf':
             $ext = '.pdf';
-            $folder = 'pdf_notes';
             break;
 
         default:
             $ext = '';
-            $found_error = "File had no extension or extension was invalid";
             break;
     }
-    return $found_error;
+    return $ext;
+}
+
+function getFolder($ext){
+    $folder = "";
+    switch($ext){
+        case '.mp3': $folder = 'mp3'; break;
+        case '.pdf': $folder = 'pdf_notes'; break;
+        default: $folder = ''; break;
+    }
+    return $folder;
 }
 
 ?>

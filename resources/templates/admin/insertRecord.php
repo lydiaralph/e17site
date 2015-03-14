@@ -1,103 +1,70 @@
 <?php
 
-/* 
- * Handles form input once JS validation is completed
+/*
+ * Takes sanitized record produced by processInput.php and tries to insert
+ * it into MySQL DB
  */
 
-// FirePHP is not dependent on anything else, i.e. doesn't require config.php
-define('__ROOT__', dirname(dirname(dirname(dirname(__FILE__))))); 
-require_once (__ROOT__ . '/FirePHPCore/fb.php');
-ob_start();
-$firephp = FirePHP::getInstance(true);
+require_once(__RESOURCES__ . "/config.php");
+require_once(LIBRARY_PATH . "/userAuthentication.php");
 
-define('__RESOURCES__', dirname(dirname(dirname(__FILE__)))); 
-require_once(__RESOURCES__. "/config.php"); 
+//TODO: request authorised connection
 
-require_once(TEMPLATES_PATH . "/admin/getFileName.php");
-require_once(TEMPLATES_PATH . "/admin/phpFunctions.php");
-require_once(TEMPLATES_PATH . "/admin/phpValidation.php");
 
-//$firephp->log('Found all required files for insertRecord.php');
+function insertRecord($field_values) {
+    $query = buildQuery($field_values);
 
-// TODO: replace this with variables from mysql
-$field_names = array("day", "month", "year", "time", "sermon_title", "series",
-    "preacher", "bible_book", "bible_ch_start", "bible_verse_start",
-    "bible_ch_end", "bible_verse_end", "file_name");
-
-$found_error = "";
-$count = 0;
-
-// New version but perhaps doesn't work
-if ($_POST['submitted'] == "yes") {
-    $firephp->log('Processing insertRecord()');
-    
-    $cleanFileName = "";
-    $date = "";
-    
-    // Variables supplied by HTML form
-    $firephp->log('Generating variables...');
-    foreach ($field_names as $field) {
-        $firephp->log('Generating variable ' . $field);
-        ${$field} = "";
-        $firephp->log('Generated variable ' . ${$field});
+    $db_connection = openConnection($authorised);
+    if (!$db_connection) {
+        FB::error("Not connected to DB. Terminating process...");
+        exit;
     }
         
-    $found_error = "";
+    mysql_select_db($db_database);
 
-    $firephp->log('Checking input of fields...');
-    $found_error .= checkInput($field_names);
-    $firephp->log('found_error: ' . $found_error);
-    // TODO: also check for sanitized strings
+    // TODO: temp query for testing
+    $dry_run_query = "BEGIN TRANSACTION " .
+            $query .
+            "ROLLBACK TRANSACTION";
+
+    // TODO: test mode properties to determine which query to use
+    if ($dry_run_query) {
+        if (!mysql_query($dry_run_query, $db_connection)) {
+            FB::error("INSERT failed: $dry_run_query: " .
+                    mysql_error());
+            exit;
+        }
+    }
+    closeConnection($db_connection);
     
-    // checkdate() is an inbuilt function
-    if( checkdate($month, $day, $year)){
-      $date = $year . "-" . $month . "-" . $day;
-    }
-    else{
-      $found_error .= "Invalid date entered<br />";
-    }
-    $firephp->log('found_error: ' . $found_error);
- 
-    $bible_ref = $bible_ch_start . ":" . $bible_verse_start . " - " . $bible_ch_end . ":" . $bible_verse_end;
-    // TODO: Warn if date is not a Sunday
-
-    if (!$_FILES) {
-        $found_error .= "No file was posted<br />";
-    }
-    else {
-        $found_error .= getFileName($date, $time, $sermon_title, $cleanFileName);
-    }
-    $firephp->log('found_error: ' . $found_error);
-
-    //echo "<div>Found error: $found_error</div>";
-    
-    // If fails, reloads the HTML form with error
-    if ($found_error == "") {
-        // TODO: replace with variables as order has changed
-        // TODO: replace db table name with variable
-        $query = "INSERT INTO sermon_files VALUES" .
-           "(NULL, '$sermon_title', '$series', '$date', '$time', '$bible_book', '$bible_ref', '$preacher', '$cleanFileName')";
-
-        // LER TEMP REMOVED
-//        if(!mysql_query($query, $connected_to_db)) {
-//         $found_error .= "INSERT failed: $query<br />" .
-//           mysql_error() . "<br /><br />";
-//         echo $found_error;
-//         $firephp->log('found_error: ' . $found_error);
-//        }
-//        else { 
-          echo "Success!<br />";
-          //TODO: replace with soft link to createNewRecord.php
-          echo "<form action=\"createNewRecord.php\"><input type=\"submit\" value=\"Enter another record\"></form>";
-          //TODO: replace with soft link to sermons.php
-          echo "<form action=\"sermons.php\"><input type=\"submit\" value=\"Go to sermons page\"></form>";
-//        }
-        exit; 
-    }    
-    $firephp->log('found_error: ' . $found_error);
-    return $found_error;
+    return true;
 }
-ob_end_flush(); 
 
+function buildQuery($field_values) {
 
-?>
+    // TODO: replace with variables as order has changed
+
+    $query = "INSERT INTO sermon_files VALUES(NULL";
+
+    // Iterate through field values, adding VALUES to query
+    foreach ($field_values as $key => $value) {
+        switch ($key) {
+            // Fields have been replaced by formatted versions
+            case 'day':
+            case 'month':
+            case 'year':
+            case 'bible_ch_start':
+            case 'bible_verse_start':
+            case 'bible_ch_end':
+            case 'bible_verse_end':
+                break;
+
+            default:
+                $query .= ", '$value'";
+        }
+    }
+
+    $query .= ")";
+
+    FB::log('Query to be inserted: ' . $query);
+}

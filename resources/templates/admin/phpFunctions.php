@@ -3,15 +3,8 @@
 // PHP functions
 
 function isNotBlank($value) {
-    if ($value == "") {
-        return ($value . " must not be blank.\n");
-    }
-    if ($value == null) {
-        return ($value . " must not be blank.\n");
-    }
-    return "";
+    return ($value == "" || $value == null) ? true : false;
 }
-
 
 function sanitizeString($var)
 {

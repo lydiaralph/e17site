@@ -1,18 +1,37 @@
 <?php
 
 require_once (__ROOT__ . '/FirePHPCore/fb.php');
+
+
 ob_start();
+
+require_once(LIBRARY_PATH . "/userAuthentication.php");
+
+
 
 /*
  * Convert the $_POST array values into object values
  */
 
 function getFieldValues($field_names) {
-    FB::log('Getting field values...');
+    
+    
+$db_connection = openConnection('read_only');
+//    FB::log('Getting field values for...');
     $field_values = array_fill_keys($field_names, '');
     
     foreach ($field_names as $field) {
+//        FB::log($field);
         switch ($field) {
+        // Do not check or use ID or any field with no name
+        // Date should come in 'day', 'month' and 'year fields
+        // bible_ref should come as 'bible_ch_start', 'bible_verse_start', 'bible_ch_end', 'bible_verse_end'
+
+            case '':
+            case 'id':
+            case 'date':
+            case 'bible_ref':
+                break;
 
             case 'time':
                 switch ($_POST[$field]) {
@@ -25,7 +44,7 @@ function getFieldValues($field_names) {
                         break;
                 }
                 break;
-
+            
             case 'day':
             case 'year':
                 $field_values[$field] = mysql_real_escape_string($_POST[$field]);
@@ -37,8 +56,8 @@ function getFieldValues($field_names) {
 
             case 'preacher':
             case 'series':
-                if (isset($_POST['select_' . $field_name])) {
-                    $field_values[$field] = sanitizeString($_POST['select_' . $field_name]);
+                if (isset($_POST['select_' . $field])) {
+                    $field_values[$field] = sanitizeString($_POST['select_' . $field]);
                 } else if (isset($_POST['add_' . $field])) {
                     $field_values[$field] = sanitizeString($_POST['add_' . $field]);
                 }
@@ -52,6 +71,10 @@ function getFieldValues($field_names) {
                 $field_values[$field] = sanitizeString($_POST[$field]);
                 break;
         } // end switch ($field)
-    }    
+    }
+
+    if ($db_connection) {
+        closeConnection($db_connection);
+    }
     return $field_values;
 }

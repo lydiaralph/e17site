@@ -9,15 +9,30 @@ require_once (__ROOT__ . '/FirePHPCore/fb.php');
 ob_start();
 //$firephp = FirePHP::getInstance(true);
 
-function checkFieldValuesAreNotBlank($field_values) {
+function checkFieldValuesAreNotBlank($field_list) {
     FB::log('Checking fields are not blank...');
     $found_error = "";
-    foreach ($field_values as $field) {
-        if(!isNotBlank($field)){
-            $found_error .= "$field must not be blank";
-            FB::log($found_error);
+    
+    // File name is handled separately
+    $expected_blank_fields = array('', 'id', 'bible_ref', 'date', 'file_name');
+    
+//    foreach ($field_lists as $field_list) {
+//            FB::log("Field list: ");
+//            FB::log($field_list);
+        
+        foreach ($field_list as $key => $value) {
+            if (in_array($key, $expected_blank_fields)) {
+//                FB::log("Skipping " . $key . " as is expected to be blank");
+                continue;
+            }
+//            FB::log("Checking field " . $key);
+
+            if (isBlank($value)) {
+                $found_error .= "'$key' must not be blank";
+                FB::log($found_error);
+            }
         }
-    }
+//    }
     return $found_error;
 }
 
@@ -43,4 +58,6 @@ function validateUploadedFile ($_FILES) {
 
 }
 
-ob_end_flush(); 
+if (ob_get_level()>1) {
+    ob_end_flush();
+}

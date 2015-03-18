@@ -7,6 +7,7 @@
  */
 
 function getFormattedBibleRef($field_values){
+//    $field_values = $field_lists[0];
     $bible_ref =    $field_values['bible_ch_start'] . ":" . 
                     $field_values['bible_verse_start'] . " - " . 
                     $field_values['bible_ch_end'] . ":" . 

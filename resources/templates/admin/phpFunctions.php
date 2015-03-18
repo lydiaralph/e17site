@@ -2,7 +2,7 @@
 
 // PHP functions
 
-function isNotBlank($value) {
+function isBlank($value) {
     return ($value == "" || $value == null) ? true : false;
 }
 

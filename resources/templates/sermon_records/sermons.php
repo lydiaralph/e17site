@@ -10,7 +10,8 @@ require_once(__RESOURCES__.'/config.php');
 // SQL queries
 
 // TODO: get records: $field_names, $full_db
-require_once(LIBRARY_PATH . "/readDbRecords.php");
+// LER: not sure this is required as not directly invoked?
+//require_once(LIBRARY_PATH . "/readDbRecords.php");
 
 // Page contents     
 require_once(TEMPLATES_PATH . "/pageHeader.php");

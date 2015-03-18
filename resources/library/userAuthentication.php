@@ -14,7 +14,7 @@ require_once(TEMPLATES_PATH . "/admin/phpFunctions.php");
  * Returns $db_connection as either 'read_only' and 'authorised'. 
  * Options could be extended later if adding different permissions
  * 
- * Does not perform mysql_select_db($db_database) as this should be done
+ * Does not perform mysql_select_db(DB_DATABASE) as this should be done
  * as part of process.
  * 
  * @param $connection_requested
@@ -58,7 +58,7 @@ function closeConnection($db_connection){
  * @return $db_read_only database connection
  */
 function getReadOnlyDbConnection() {
-    $db_read_only = mysql_connect(DB_HOSTNAME, $db_reader_user, $db_reader_password);
+    $db_read_only = mysql_connect(DB_HOSTNAME, DB_READER_USER, DB_READER_PASSWORD);
     if (!$db_read_only) {
         FB::warn("Unable to establish read-only connection to MySQL DB: "
                 . mysql_error());

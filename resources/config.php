@@ -111,4 +111,12 @@ defined("TEMPLATES_PATH")
 defined("LIBRARY_PATH")
     or define("LIBRARY_PATH", (__RESOURCES__ . '/library'));
 
+defined("ADMIN_PATH")
+    or define("ADMIN_PATH", (TEMPLATES_PATH . '/admin'));
+
+defined("SERMONS_PATH")
+    or define("SERMONS_PATH", (TEMPLATES_PATH . '/sermon_records'));
+
+defined("ERROR_MESSAGE")
+    or define("ERROR_MESSAGE", "ERROR: ");
 ?>

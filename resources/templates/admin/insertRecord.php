@@ -1,59 +1,73 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Takes sanitized record produced by processInput.php and tries to insert
+ * it into MySQL DB
  */
-function insertRecord($field_names){
-    
-    $cleanFileName = "";
-    $date = "";
-    
-    // Variables supplied by HTML form
-    foreach ($field_names as $field) {
-        ${$field} = "";
-    }
-        
-    $found_error = "";
+require_once (__ROOT__ . '/FirePHPCore/fb.php');
+require_once(__RESOURCES__ . "/config.php");
+require_once(LIBRARY_PATH . "/userAuthentication.php");
 
-    $found_error .= checkInput($field_names);
+//TODO: request authorised connection
+
+
+function insertRecord($field_values) {
+    $found_error = ERROR_MESSAGE;
     
-    if( checkdate($month, $day, $year)){
-      $date = $year . "-" . $month . "-" . $day;
+    $query = buildQuery($field_values);
+
+    $db_connection = openConnection('authorised');
+    if (!$db_connection) {
+        $found_error .= "Not connected to DB. Terminating process...";
+        FB::error($found_error);
+        return $found_error;
+    }
+    if (!mysql_select_db(DB_DATABASE)){
+        $found_error .= "Could not select DB table. Terminating process...";
+        $db_connection = closeConnection($db_connection);
+        FB::error($found_error);
+        return $found_error;
+    }
+
+    // TODO: test mode properties to determine which query to use
+    if (strcmp($query,"")!==0 ) {
+        if (mysql_query($query, $db_connection)) {
+            FB::log("Successfully inserted new record");
+        } else {
+            $found_error .= "INSERT failed: $query: " .
+                    mysql_error();
+            FB::error($found_error);
+            return $found_error;
+            //exit;
+        }
     }
     else{
-      $found_error .= "Invalid date entered<br />";
+        FB::log("Error building query: " . $query);
     }
- 
-    $bible_ref = $bible_ch_start . ":" . $bible_verse_start . " - " . $bible_ch_end . ":" . $bible_verse_end;
-    // TODO: Warn if date is not a Sunday
-
-    if (!$_FILES) {
-        $found_error .= "No file was posted<br />";
-    }
-    else {
-        $found_error .= getFileName($date, $time, $sermon_title, $cleanFileName);
-    }
-
-    // If fails, reloads the HTML form with error
-    if ($found_error == "") {
-        // TODO: replace with variables as order has changed
-        $query = "INSERT INTO sermon_files VALUES" .
-           "(NULL, '$sermon_title', '$series', '$date', '$time', '$bible_book', '$bible_ref', '$preacher', '$cleanFileName')";
-
-        if(!mysql_query($query, $connected_to_db)) {
-         $found_error .= "INSERT failed: $query<br />" .
-           mysql_error() . "<br /><br />";
-         echo $found_error;
-        }
-        else { 
-          echo "Success!<br />";
-          echo "<form action=\"create_new_record.php\"><input type=\"submit\" value=\"Enter another record\"></form>";
-          echo "<form action=\"sermons.php\"><input type=\"submit\" value=\"Go to sermons page\"></form>";
-        }
-        exit; 
-    }    
-    return $found_error;
+    closeConnection($db_connection);
+    
+    return "";
 }
-?>
+
+function buildQuery($field_values) {
+
+    // TODO: replace with variables as order has changed
+
+    // Fields have been replaced by formatted versions
+    $expected_blank_fields = array('', 'id', 'day','month','year', 
+    'bible_ch_start', 'bible_verse_start', 'bible_ch_end', 'bible_verse_end');
+
+    $query = "INSERT INTO " . DB_TABLE . " VALUES(NULL";
+
+    // Iterate through field values, adding VALUES to query
+    foreach ($field_values as $key => $value) {
+        if (in_array($key, $expected_blank_fields)) { continue; }
+        $query .= ", '$value'";
+    }
+
+
+    $query .= ")";
+
+    FB::log('Query to be inserted: ' . $query);
+    return $query;
+}

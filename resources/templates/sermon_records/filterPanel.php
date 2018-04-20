@@ -8,11 +8,15 @@ echo "<script defer type=\"text/javascript\" src=\"/public_html/js/filter.js\"><
 echo "<form id=\"selform\" action=\"\">";
 echo "<p class=\"header3\">Filter your results</p>";
 
+$records_to_fetch = array('get_lists', 'column_names');
 
+$records = readDbRecords($records_to_fetch);
+$field_names = $records['column_names'];
+$required_lists = $records['get_lists'];
 
 /* FILTER BY DB FIELDS */
 
-foreach ($mysql_queries as $field) {
+foreach ($required_lists as $field) {
     echo "<select id=" . $field . " onChange=\"select(this.id)\">";
     switch ($field) {
         case 'bible_book':

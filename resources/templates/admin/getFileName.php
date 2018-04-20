@@ -7,39 +7,88 @@
  * 
  */
 
-function getFileName($date, $time, $sermon_title, $cleanFileName) {
+function getFileName($field_values){
+    
+    //$field_values = $field_lists[0];
+    
+    FB::log("Field values: ");
+    FB::log($field_values);
+    
+    $found_error = ERROR_MESSAGE;
+    
     $file_name = $_FILES['file_name']['name'];
+    $file_path = "";
 
     if (!$file_name) {
         $found_error .= "No file uploaded. Please upload an mp3 file or a PDF file.";
+        FB::error($found_error);
+        return $found_error;
+        //exit;
     } else {
-        $new_file_name = $date . '_' . $time . '_' . str_replace(" ", '_', $sermon_title);
-
-        $ext = $folder = "";
-
-        $found_error = checkFileType($ext, $folder);
-
-        if ($ext == "") {
-            $found_error .= "'$file_name' is not of an accepted file type. Please upload mp3 or PDF files only.";
-        }
+        $file_path = getNewFilePath($field_values);
         
-
-        //  $length = wavDur($_FILES['filename']['tmp_name']);
-        $cleanFileName = $new_file_name . $ext;
-        $file_path = $folder . "/" . $cleanFileName;
-        $success = move_uploaded_file($_FILES['file_name']['tmp_name'], $file_path);
-
-        // upload file
-
-        if (!$success) {
+        if ($file_path == ""){
+            $found_error .= "Could not determine file path";
+            FB::error($found_error);
+            return $found_error;
+            //exit;
+        } 
+        
+        if(!move_uploaded_file($_FILES['file_name']['tmp_name'], $file_path)){
             $found_error .= "Upload failed";
+            FB::error($found_error);
+            return $found_error;
+            //exit;
         }
     }
-    return $found_error;
+    FB::log("File path to be returned: ");
+    FB::log($file_path);
+    return $file_path;
 }
 
-function checkFileType($ext, $folder) {
-    switch ($_FILES['file_name']['type']) {
+function getNewFilePath($field_values){
+    // Find extension: file should be of audio or PDF type
+    $ext = $folder = "";
+    $ext = checkFileType($_FILES['file_name']['type']);
+    $folder = getFolder($ext);
+    if ($ext == "" || $folder == "") {
+        $found_error .= "'$file_name' had no extension or extension was invalid. "
+                . "Please upload mp3 or PDF files only.";
+        FB::error($found_error);
+        return $found_error;
+        //exit;
+    }
+    $new_file_name = renameUploadedFile($field_values);
+
+        //  TODO: $length = wavDur($_FILES['filename']['tmp_name']);
+    $file_path = $folder . "/" . $new_file_name . $ext;
+
+    return $file_path;
+}
+
+function renameUploadedFile($field_values) {
+
+    if (isBlank($field_values['date']) || isBlank($field_values['time']) || isBlank($field_values['sermon_title'])) {
+        $found_error .= "Something went wrong while generating a new file name";
+        FB::error($found_error);
+        FB::error("Check the following fields: ");
+        FB::error("Date: " . $field_values['date']);
+        FB::error("Time: " . $field_values['time']);
+        FB::error("Sermon Title: " . $field_values['sermon_title']);
+        return $found_error;
+    }
+
+    // Sanitize file name. New file name based on date, time, title.
+    $new_file_name = $field_values['date'] . '_' .
+            $field_values['time'] . '_' .
+            str_replace(" ", '_', $field_values['sermon_title']);
+
+    return $new_file_name;
+}
+
+function checkFileType($fileType) {
+    $ext = "";
+    switch ($fileType) {
         case 'audio/mp3':
         case 'audio/mpeg':
         case 'audio/mpeg1':
@@ -47,20 +96,35 @@ function checkFileType($ext, $folder) {
         case 'audio/mpeg3':
         case 'audio/mpeg4':
             $ext = '.mp3';
-            $folder = 'mp3';
             break;
 
         case 'application/pdf':
             $ext = '.pdf';
-            $folder = 'pdf_notes';
             break;
 
         default:
             $ext = '';
-            $found_error = "File had no extension or extension was invalid";
             break;
     }
-    return $found_error;
+    return $ext;
+}
+
+function getFolder($ext){
+    $folder = "";
+    switch($ext){
+        case '.mp3': 
+            $folder = __ROOT__ . '/mp3'; 
+            break;
+        
+        case '.pdf': 
+            $folder = __ROOT__ . '/pdf_notes'; 
+            break;
+        
+        default: 
+            $folder = ''; 
+            break;
+    }
+    return $folder;
 }
 
 ?>

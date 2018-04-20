@@ -39,6 +39,8 @@ $firephp->log($var, 'Iterators');
 //FB::warn('Warn message');
 //FB::error('Error message');
 
+$firephp->log('Testing FirePHP');
+
 ob_end_flush(); 
 
 ?>

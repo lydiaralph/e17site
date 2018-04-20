@@ -1,6 +1,11 @@
 <?php
 
 // PHP functions
+
+function isBlank($value) {
+    return ($value == "" || $value == null) ? true : false;
+}
+
 function sanitizeString($var)
 {
   if(get_magic_quotes_gpc()) $var = stripslashes($var);
